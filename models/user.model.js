@@ -1,14 +1,20 @@
+import { Module } from 'module';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 // Define User schema
-var _User = new Schema({
+var User = new Schema({
     name : {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password : {
         type: String,
-        required: true
+        required: true,
+    },
+    token: {
+        type: String
     }
-})
-export default mongoose.model('User', _User);
+});
+module.exports = User;

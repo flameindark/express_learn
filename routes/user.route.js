@@ -1,21 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../models/user.js');
-var User = models.User;
+import express from 'express'
+import validate from 'express-validation'
+import paramValidation  from '../config/param-validation';
+import userCtrl from '../controllers/user.controller';
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  var user = new User({
-    email : 'nowind_lee@qq.com',
-    name : 'Freewind'
-  });
-  user.save(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('meow');
-    }
-  });
-  res.send('Data inited');
-});
-module.exports = router;
+const router = express.Router();
+
+router.route('/')
+  .get(userCtrl.list)
+  .post(validate(paramValidation.createUser), userCtrl.create)
+
+router.route('/:userId')
+  .get(userCtrl.get)
+  .put(validate(paramValidation.updateUser), userCtrl.update)
+  .delete(userCtrl.remove);
+
+router.param('userId', userCtrl.load);
+
+export default router;
